@@ -24,6 +24,9 @@ export default () => {
 
     // React Router v6 doesn't have history.listen, so we handle this differently
     // The navigation is handled through the navigate function
+    if (typeof onParentNavigate === 'function') {
+      onParentNavigate({ pathname: location.pathname });
+    }
   }, [location.pathname]);
 
   return <div ref={ref} />;
