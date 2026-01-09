@@ -23,6 +23,8 @@ export default ({ onSignIn }) => {
       onSignIn,
     });
 
+    // Notify the mounted auth microfrontend when the parent location changes
+    onParentNavigate({ pathname: location.pathname });
     // React Router v6 doesn't have history.listen, so we handle this differently
     // The navigation is handled through the navigate function
   }, [location.pathname]);
