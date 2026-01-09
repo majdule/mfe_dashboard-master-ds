@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, Router } from 'react-router-dom';
+import { Routes, Route, MemoryRouter } from 'react-router-dom';
 import { StylesProvider, createGenerateClassName } from '@material-ui/core/styles';
 
 import Signin from './components/Signin';
@@ -9,20 +9,16 @@ const generateClassName = createGenerateClassName({
   productionPrefix: 'au',
 });
 
-export default ({ history, onSignIn }) => {
+export default ({ onSignIn, initialPath }) => {
   return (
     <div style={{ border: '2px dashed #40e67c' }}>
       <StylesProvider generateClassName={generateClassName}>
-        <Router history={history}>
-          <Switch>
-            <Route path="/auth/signin" component={Signin}>
-              <Signin onSignIn={onSignIn} />
-            </Route>
-            <Route path="/auth/signup" component={Signup}>
-              <Signup onSignIn={onSignIn} />
-            </Route>
-          </Switch>
-        </Router>
+        <MemoryRouter initialEntries={[initialPath || '/auth/signin']}>
+          <Routes>
+            <Route path="/auth/signin" element={<Signin onSignIn={onSignIn} />} />
+            <Route path="/auth/signup" element={<Signup onSignIn={onSignIn} />} />
+          </Routes>
+        </MemoryRouter>
       </StylesProvider>
     </div>
   );

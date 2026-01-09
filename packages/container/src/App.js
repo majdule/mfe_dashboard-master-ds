@@ -1,7 +1,6 @@
-import React, { lazy, Suspense, useState, useEffect } from 'react';
-import { Router, Route, Switch, Redirect } from 'react-router-dom';
+import React, { lazy, Suspense, useState, useEffect, useRef } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { StylesProvider, createGenerateClassName } from '@material-ui/core';
-import { createBrowserHistory } from 'history';
 
 import Header from './components/Header';
 import Progress from './components/Progress';
@@ -15,38 +14,44 @@ const generateClassName = createGenerateClassName({
   productionPrefix: 'co',
 });
 
-const history = createBrowserHistory();
-
-export default () => {
+const AppContent = () => {
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const navigate = useNavigate();
+  const prevIsSignedIn = useRef(false);
 
   useEffect(() => {
-    if (isSignedIn) {
-      history.push('/dashboard');
+    // Only navigate to dashboard when user just signed in (changed from false to true)
+    if (isSignedIn && !prevIsSignedIn.current) {
+      navigate('/dashboard');
     }
-  }, [isSignedIn]);
+    prevIsSignedIn.current = isSignedIn;
+  }, [isSignedIn, navigate]);
 
   return (
-    <Router history={history}>
-      <StylesProvider generateClassName={generateClassName}>
-        <div>
-          <Header onSignOut={() => setIsSignedIn(false)} isSignedIn={isSignedIn} />
-          <Suspense fallback={<Progress />}>
-            <Switch>
-              {/* Job of a container app (ex. MEAS) would be to select which
-              microfrontend would be displayed on a certain routes */}
-              <Route path="/auth">
-                <AuthLazy onSignIn={() => setIsSignedIn(true)} />
-              </Route>
-              <Route path="/dashboard">
-                {!isSignedIn && <Redirect to="/" />}
-                <DashboardLazy />
-              </Route>
-              <Route path="/" component={MarketingLazy} />
-            </Switch>
-          </Suspense>
-        </div>
-      </StylesProvider>
-    </Router>
+    <StylesProvider generateClassName={generateClassName}>
+      <div>
+        <Header onSignOut={() => setIsSignedIn(false)} isSignedIn={isSignedIn} />
+        <Suspense fallback={<Progress />}>
+          <Routes>
+            {/* Job of a container app (ex. MEAS) would be to select which
+            microfrontend would be displayed on a certain routes */}
+            <Route path="/auth/*" element={<AuthLazy onSignIn={() => setIsSignedIn(true)} />} />
+            <Route
+              path="/dashboard/*"
+              element={!isSignedIn ? <Navigate to="/" replace /> : <DashboardLazy />}
+            />
+            <Route path="/*" element={<MarketingLazy />} />
+          </Routes>
+        </Suspense>
+      </div>
+    </StylesProvider>
+  );
+};
+
+export default () => {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
   );
 };
