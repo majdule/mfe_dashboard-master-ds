@@ -5,7 +5,18 @@ export default () => {
   const ref = useRef(null);
 
   useEffect(() => {
-    mount(ref.current);
+    if (!ref.current) {
+      console.error('DashboardApp: ref.current is null');
+      return;
+    }
+
+    const { unmount } = mount(ref.current);
+
+    return () => {
+      if (unmount) {
+        unmount();
+      }
+    };
   }, []);
 
   return <div ref={ref} />;

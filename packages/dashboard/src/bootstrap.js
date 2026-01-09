@@ -1,10 +1,36 @@
 import { createApp } from 'vue';
+import PrimeVue from 'primevue/config';
 import Dashboard from './components/Dashboard.vue';
 
 // Mount function to start up the app
 const mount = (el) => {
+  if (!el) {
+    console.error('Dashboard mount: element is null or undefined');
+    return {
+      onParentNavigate() {},
+      unmount() {}
+    };
+  }
+
   const app = createApp(Dashboard);
+
+  // Configure PrimeVue
+  app.use(PrimeVue, {
+    ripple: true
+  });
+
   app.mount(el);
+
+  return {
+    onParentNavigate() {
+      // Placeholder for navigation handling if needed
+    },
+    unmount() {
+      if (app) {
+        app.unmount();
+      }
+    }
+  };
 };
 
 // If we are in development and in isolation,

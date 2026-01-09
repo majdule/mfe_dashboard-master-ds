@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -53,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Header({ isSignedIn, onSignOut }) {
   const classes = useStyles();
+  const navigate = useNavigate();
 
   // Communication between microfrontends via callbacks
   const onClick = () => {
@@ -61,11 +62,21 @@ export default function Header({ isSignedIn, onSignOut }) {
     }
   };
 
+  const handleLogoClick = () => {
+    navigate('/');
+  };
+
   return (
     <React.Fragment>
       <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
-          <Typography variant="h6" color="inherit" noWrap component={RouterLink} to="/">
+          <Typography
+            variant="h6"
+            color="inherit"
+            noWrap
+            onClick={handleLogoClick}
+            style={{ cursor: 'pointer' }}
+          >
             App
           </Typography>
           <Button

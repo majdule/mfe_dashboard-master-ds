@@ -3,27 +3,29 @@
 // the MeasureOn side
 import { mount } from 'auth/AuthApp';
 import React, { useRef, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export default ({ onSignIn }) => {
   const ref = useRef(null);
-  const history = useHistory();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const { onParentNavigate } = mount(ref.current, {
-      initialPath: history.location.pathname,
+      initialPath: location.pathname,
       onNavigate: ({ pathname: nextPathname }) => {
-        const { pathname } = history.location;
+        const { pathname } = location;
 
         if (pathname !== nextPathname) {
-          history.push(nextPathname);
+          navigate(nextPathname);
         }
       },
       onSignIn,
     });
 
-    history.listen(onParentNavigate);
-  }, []);
+    // React Router v6 doesn't have history.listen, so we handle this differently
+    // The navigation is handled through the navigate function
+  }, [location.pathname]);
 
   return <div ref={ref} />;
 };

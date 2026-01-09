@@ -13,7 +13,13 @@ const devConfig = {
     port: 8081,
     historyApiFallback: {
       index: '/index.html',
-    }, 
+    },
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
+    client: {
+      overlay: false,
+    },
   },
   plugins: [
     new ModuleFederationPlugin({

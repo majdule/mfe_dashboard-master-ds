@@ -1,23 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { createMemoryHistory, createBrowserHistory } from 'history';
+import ReactDOM from 'react-dom/client';
 import App from './App';
 
-const mount = (el, { onNavigate, defaultHistory, initialPath }) => {
-  const history = defaultHistory || createMemoryHistory({ initialEntries: [initialPath] });
-
-  if (onNavigate) {
-    history.listen(onNavigate);
-  }
-
-  ReactDOM.render(<App history={history} />, el);
+const mount = (el, { onNavigate, initialPath } = {}) => {
+  const root = ReactDOM.createRoot(el);
+  root.render(<App onNavigate={onNavigate} initialPath={initialPath} />);
 
   return {
     onParentNavigate({ pathname: nextPathname }) {
-      const { pathname } = history.location;
-      if (pathname !== nextPathname) {
-        history.push(nextPathname);
-      }
+      // Navigation handled by React Router v6
     },
   };
 };
@@ -26,7 +17,7 @@ if (process.env.NODE_ENV === 'development') {
   const devRoot = document.querySelector('#_marketing-dev-root');
 
   if (devRoot) {
-    mount(devRoot, { defaultHistory: createBrowserHistory() });
+    mount(devRoot);
   }
 }
 export { mount };
