@@ -1,12 +1,12 @@
 const { VueLoaderPlugin } = require('vue-loader');
 
 module.exports = {
-  entry: './src/index.js',
+  entry: './src/index.ts',
   output: {
     filename: '[name].[contenthash].js',
   },
   resolve: {
-    extensions: ['.js', '.vue'],
+    extensions: ['.ts', '.tsx', '.js', '.vue'],
   },
   module: {
     rules: [
@@ -17,6 +17,15 @@ module.exports = {
       {
         test: /\.vue$/,
         use: 'vue-loader',
+      },
+      {
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+        exclude: /node_modules/,
+        options: {
+          appendTsSuffixTo: [/\.vue$/],
+          transpileOnly: true,
+        },
       },
       {
         test: /\.css$/,

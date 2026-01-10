@@ -252,7 +252,8 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, ref, Ref } from 'vue';
 import 'primevue/resources/themes/saga-blue/theme.css';
 import 'primevue/resources/primevue.css';
 import 'primeflex/primeflex.css';
@@ -268,7 +269,26 @@ import DataTable from 'primevue/datatable';
 import Chart from 'primevue/chart';
 import ProgressBar from 'primevue/progressbar';
 
-export default {
+interface City {
+  name: string;
+  code: string;
+}
+
+interface Dataset {
+  label: string;
+  data: number[];
+  fill: boolean;
+  backgroundColor: string;
+  borderColor: string;
+}
+
+interface LineData {
+  labels: string[];
+  datasets: Dataset[];
+}
+
+export default defineComponent({
+  name: 'Dashboard',
   components: {
     ProgressBar,
     Checkbox,
@@ -280,67 +300,62 @@ export default {
     DataTable,
     Chart,
   },
-  data() {
-    return {
-      tasksCheckbox: [],
-      dropdownCities: [
-        { name: 'New York', code: 'NY' },
-        { name: 'Rome', code: 'RM' },
-        { name: 'London', code: 'LDN' },
-        { name: 'Istanbul', code: 'IST' },
-        { name: 'Paris', code: 'PRS' },
+  setup() {
+    const tasksCheckbox: Ref<string[]> = ref([]);
+    const dropdownCities: Ref<City[]> = ref([
+      { name: 'New York', code: 'NY' },
+      { name: 'Rome', code: 'RM' },
+      { name: 'London', code: 'LDN' },
+      { name: 'Istanbul', code: 'IST' },
+      { name: 'Paris', code: 'PRS' },
+    ]);
+    const dropdownCity: Ref<City | null> = ref(null);
+    const products: Ref<any[] | null> = ref(null);
+    const lineData: Ref<LineData> = ref({
+      labels: [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
       ],
-      dropdownCity: null,
-      options: {
-        defaultDate: '2019-01-01',
-        header: {
-          left: 'prev,next',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay',
+      datasets: [
+        {
+          label: 'First Dataset',
+          data: [65, 59, 80, 81, 56, 55, 40],
+          fill: false,
+          backgroundColor: '#2f4860',
+          borderColor: '#2f4860',
         },
-        editable: true,
-      },
-      events: null,
-      products: null,
-      selectedProducts: null,
-      lineData: {
-        labels: [
-          'January',
-          'February',
-          'March',
-          'April',
-          'May',
-          'June',
-          'July',
-        ],
-        datasets: [
-          {
-            label: 'First Dataset',
-            data: [65, 59, 80, 81, 56, 55, 40],
-            fill: false,
-            backgroundColor: '#2f4860',
-            borderColor: '#2f4860',
-          },
-          {
-            label: 'Second Dataset',
-            data: [28, 48, 40, 19, 86, 27, 90],
-            fill: false,
-            backgroundColor: '#00bb7e',
-            borderColor: '#00bb7e',
-          },
-        ],
-      },
-    };
-  },
-  methods: {
-    formatCurrency(value) {
+        {
+          label: 'Second Dataset',
+          data: [28, 48, 40, 19, 86, 27, 90],
+          fill: false,
+          backgroundColor: '#00bb7e',
+          borderColor: '#00bb7e',
+        },
+      ],
+    });
+
+    const formatCurrency = (value: number): string => {
       return value.toLocaleString('en-US', {
         style: 'currency',
         currency: 'USD',
       });
-    },
+    };
+
+    return {
+      tasksCheckbox,
+      dropdownCities,
+      dropdownCity,
+      products,
+      lineData,
+      formatCurrency,
+    };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

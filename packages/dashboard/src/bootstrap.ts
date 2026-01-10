@@ -1,9 +1,10 @@
-import { createApp } from 'vue';
+import { createApp, App as VueApp } from 'vue';
 import PrimeVue from 'primevue/config';
 import Dashboard from './components/Dashboard.vue';
+import { VueMountResult } from './types/mount';
 
 // Mount function to start up the app
-const mount = (el) => {
+const mount = (el: HTMLElement | null): VueMountResult => {
   if (!el) {
     console.error('Dashboard mount: element is null or undefined');
     return {
@@ -12,7 +13,7 @@ const mount = (el) => {
     };
   }
 
-  const app = createApp(Dashboard);
+  const app: VueApp = createApp(Dashboard);
 
   // Configure PrimeVue
   app.use(PrimeVue, {
@@ -39,7 +40,7 @@ if (process.env.NODE_ENV === 'development') {
   const devRoot = document.querySelector('#_dashboard-dev-root');
 
   if (devRoot) {
-    mount(devRoot);
+    mount(devRoot as HTMLElement);
   }
 }
 

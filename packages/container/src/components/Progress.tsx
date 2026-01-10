@@ -1,8 +1,8 @@
 import React from 'react';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles((theme: Theme) => {
   return createStyles({
     bar: {
       width: '100%',
@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => {
   });
 });
 
-export default () => {
+const Progress: React.FC = () => {
   const classes = useStyles();
 
   return (
@@ -22,3 +22,5 @@ export default () => {
     </div>
   );
 };
+
+export default Progress;

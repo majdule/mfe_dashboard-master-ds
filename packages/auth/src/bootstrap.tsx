@@ -1,15 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import { MountOptions, MountResult } from './types/mount';
 
-// Exporting as a js function in order to remain frameworks agnostic
-// Mount function takes in the refference of an html element and then display some content inside it
-const mount = (el, { onSignIn, onNavigate, initialPath } = {}) => {
+const mount = (el: HTMLElement, options: MountOptions = {}): MountResult => {
+  const { onSignIn, onNavigate, initialPath } = options;
+
   const root = ReactDOM.createRoot(el);
   root.render(<App onSignIn={onSignIn} onNavigate={onNavigate} initialPath={initialPath} />);
 
   return {
-    onParentNavigate({ pathname: nextPathname }) {
+    onParentNavigate({ pathname: nextPathname }: { pathname: string }) {
       // Navigation handled by React Router v6
     },
   };
@@ -19,7 +20,7 @@ if (process.env.NODE_ENV === 'development') {
   const devRoot = document.querySelector('#_auth-dev-root');
 
   if (devRoot) {
-    mount(devRoot);
+    mount(devRoot as HTMLElement);
   }
 }
 

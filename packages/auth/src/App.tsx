@@ -9,7 +9,13 @@ const generateClassName = createGenerateClassName({
   productionPrefix: 'au',
 });
 
-export default ({ onSignIn, initialPath }) => {
+interface AppProps {
+  onSignIn?: () => void;
+  initialPath?: string;
+  onNavigate?: (options: { pathname: string }) => void;
+}
+
+const App: React.FC<AppProps> = ({ onSignIn, initialPath }) => {
   return (
     <div style={{ border: '2px dashed #40e67c' }}>
       <StylesProvider generateClassName={generateClassName}>
@@ -23,3 +29,5 @@ export default ({ onSignIn, initialPath }) => {
     </div>
   );
 };
+
+export default App;

@@ -1,16 +1,18 @@
 // For example this component would be provided
 // by us in the documentation and imported on
 // the MeasureOn side
-import { mount } from 'auth/AuthApp';
+import { mount } from 'marketing/MarketingApp';
 import React, { useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-export default ({ onSignIn }) => {
-  const ref = useRef(null);
+const MarketingApp: React.FC = () => {
+  const ref = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
+    if (!ref.current) return;
+
     const { onParentNavigate } = mount(ref.current, {
       initialPath: location.pathname,
       onNavigate: ({ pathname: nextPathname }) => {
@@ -20,14 +22,16 @@ export default ({ onSignIn }) => {
           navigate(nextPathname);
         }
       },
-      onSignIn,
     });
 
-    // Notify the mounted auth microfrontend when the parent location changes
-    onParentNavigate({ pathname: location.pathname });
     // React Router v6 doesn't have history.listen, so we handle this differently
     // The navigation is handled through the navigate function
-  }, [location.pathname]);
+    if (typeof onParentNavigate === 'function') {
+      onParentNavigate({ pathname: location.pathname });
+    }
+  }, [location.pathname, navigate]);
 
   return <div ref={ref} />;
 };
+
+export default MarketingApp;
