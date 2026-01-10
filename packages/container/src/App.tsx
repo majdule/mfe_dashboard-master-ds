@@ -14,10 +14,10 @@ const generateClassName = createGenerateClassName({
   productionPrefix: 'co',
 });
 
-const AppContent = () => {
-  const [isSignedIn, setIsSignedIn] = useState(false);
+const AppContent: React.FC = () => {
+  const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const navigate = useNavigate();
-  const prevIsSignedIn = useRef(false);
+  const prevIsSignedIn = useRef<boolean>(false);
 
   useEffect(() => {
     // Only navigate to dashboard when user just signed in (changed from false to true)
@@ -48,10 +48,12 @@ const AppContent = () => {
   );
 };
 
-export default () => {
+const App: React.FC = () => {
   return (
     <BrowserRouter>
       <AppContent />
     </BrowserRouter>
   );
 };
+
+export default App;

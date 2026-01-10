@@ -4,6 +4,16 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.(ts|tsx)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'ts-loader',
+          options: {
+            transpileOnly: true,
+          },
+        },
+      },
+      {
         test: /\.m?js$/,
         exclude: /node_modules/,
         use: {
@@ -15,6 +25,9 @@ module.exports = {
         },
       },
     ],
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js', '.jsx'],
   },
   plugins: [
     new HtmlWebpackPlugin({

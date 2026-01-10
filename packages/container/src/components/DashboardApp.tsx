@@ -1,8 +1,8 @@
 import { mount } from 'dashboard/DashboardApp';
 import React, { useRef, useEffect } from 'react';
 
-export default () => {
-  const ref = useRef(null);
+const DashboardApp: React.FC = () => {
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!ref.current) {
@@ -21,3 +21,5 @@ export default () => {
 
   return <div ref={ref} />;
 };
+
+export default DashboardApp;

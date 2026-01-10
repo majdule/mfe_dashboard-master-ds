@@ -8,12 +8,12 @@ import Grid from '@material-ui/core/Grid';
 import StarIcon from '@material-ui/icons/StarBorder';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import { Link as RouterLink } from 'react-router-dom';
 
-function Copyright() {
+const Copyright: React.FC = () => {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
@@ -24,9 +24,9 @@ function Copyright() {
       {'.'}
     </Typography>
   );
-}
+};
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   '@global': {
     ul: {
       margin: 0,
@@ -70,7 +70,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const tiers = [
+interface Tier {
+  title: string;
+  price: string;
+  description: string[];
+  buttonText: string;
+  buttonVariant: 'outlined' | 'contained';
+  subheader?: string;
+}
+
+interface Footer {
+  title: string;
+  description: string[];
+}
+
+const tiers: Tier[] = [
   {
     title: 'Free',
     price: '0',
@@ -109,7 +123,8 @@ const tiers = [
     buttonVariant: 'outlined',
   },
 ];
-const footers = [
+
+const footers: Footer[] = [
   {
     title: 'Company',
     description: ['Team', 'History', 'Contact us', 'Locations'],
@@ -139,7 +154,7 @@ const footers = [
   },
 ];
 
-export default function Pricing() {
+const Pricing: React.FC = () => {
   const classes = useStyles();
 
   return (
@@ -251,4 +266,6 @@ export default function Pricing() {
       {/* End footer */}
     </React.Fragment>
   );
-}
+};
+
+export default Pricing;
